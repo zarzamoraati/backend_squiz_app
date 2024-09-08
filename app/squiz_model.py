@@ -35,7 +35,7 @@ class GenerateQuiz:
             model=self.__init_model()
             model.with_structured_output(SquizList)
             prompt = PromptTemplate(template="""
-            You're primary task is analize the context provided bellow and generate an quiz with at least 3 open-ended questions\n
+            You're primary task is analize the context provided bellow and generate an quiz with at least 3 open-ended questions and a maximum of 10\n
             Important don't include teh response only the question.                        
             Optionally you can follow another request if teh query provided by the user exists
                                     

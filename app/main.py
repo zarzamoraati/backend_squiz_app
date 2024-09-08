@@ -12,27 +12,27 @@ app=FastAPI()
 
 @app.get("/home")
 def home():
-    return "hello word"
+    return "Home Server"
 
 # TODO - Endpoints
 @app.post("/squiz")
 def generate_squiz(query: str = Form(...), img_ctx: Union[UploadFile, List[UploadFile]] = File(...)):
     try:
-        print("IMAGE:",img_ctx)
-        obj_file=Image.open(img_ctx[0].file)
-        content=pytesseract.image_to_string(obj_file)
-        print("Encode complete")
         model=GenerateQuiz()
-        print("Showing content:",content)
-        response=model.generate_respose(query=query,img_to_txt=str(content))
-        return response
-    
+        if len(img_ctx) == 1:
+            print(img_ctx)
+            obj_file=Image.open(img_ctx[0].file)
+            content=pytesseract.image_to_string(obj_file)
+            response=model.generate_respose(query=query,img_to_txt=str(content))
+            return response
+        else:
+            images=""
+            for image in img_ctx:
+                obj_file=Image.open(image.file)
+                content=pytesseract.image_to_string(obj_file)
+                images+=str(content)
+            response=model.generate_respose(query=query,img_to_txt=images)
+
     except Exception as e:
         return {"error":e}
     
-## TODO - Process Request
-
-
-#    if isinstance(img_ctx,List[UploadFile]):
-#             pass
-    #        raise HTTPException(status_code=403,detail="Invalid Format")
